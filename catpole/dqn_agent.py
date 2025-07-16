@@ -51,8 +51,9 @@ class DQNAgent:
             print(f"Loaded existing model from {self.model_path}")
         self.target_net.load_state_dict(self.q_net.state_dict())
 
-    def select_action(self, state):
-        if random.random() < self.epsilon:
+    def select_action(self, state, eval_mode=False):
+        epsilon = 0.0 if eval_mode else self.epsilon
+        if random.random() < epsilon:
             return random.randint(0, self.action_dim_discrete - 1)
         with torch.no_grad():
             state = torch.FloatTensor(state).unsqueeze(0)

@@ -3,7 +3,7 @@ import sys
 import pprint
 
 def main(pth_file):
-  data = torch.load(pth_file, map_location='cpu')
+  data = torch.load(pth_file, map_location='cpu', weights_only=False)
   pprint.pprint(data)
 
 if __name__ == "__main__":

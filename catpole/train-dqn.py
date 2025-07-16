@@ -18,11 +18,11 @@ def get_discrete_action(idx):
 
 # --- ハイパーパラメータ ---
 BATCH_SIZE = 64
-MAX_EPISODES = 400
+MAX_EPISODES = 300
 UPDATE_FREQ = 10 # ターゲットネットワークとモデル保存の頻度
 
 # path to save the model
-model_path_ = "best_model.pth"
+model_path_ = "model714_2.pth"
 
 # --- エージェントの初期化 ---
 agent = DQNAgent(state_dim, action_dim_discrete, buffer_capacity=10000, model_path=model_path_)
@@ -50,6 +50,20 @@ for ep in range(episode_start, MAX_EPISODES):
         a_idx = agent.select_action(state)
         action = get_discrete_action(a_idx)
         next_state, reward, terminated, truncated, _ = env.step(action)
+
+        # --- ここで中心からの距離に応じてペナルティを追加 ---
+        cart_position = next_state[0] 
+        pole_angle = next_state[1]
+        penalty = (cart_position ** 2) * 10  + (pole_angle ** 2) * 10
+        reward -= penalty
+        
+        if truncated:
+            reward -= 50
+        
+        # ----------------
+
+        #print(reward, cart_position)
+
         done = terminated or truncated
 
         agent.replay_buffer.push(state, a_idx, reward, next_state, done)
@@ -87,5 +101,5 @@ plt.xlabel("Episode")
 plt.ylabel("Total Reward")
 plt.title("Episode vs Total Reward")
 plt.grid()
-plt.savefig("reward_curve.png")
+plt.savefig(model_path_ + "reward_curve.png")
 plt.show()
