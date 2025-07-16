@@ -22,10 +22,10 @@ MAX_EPISODES = 300
 UPDATE_FREQ = 10 # ターゲットネットワークとモデル保存の頻度
 
 # path to save the model
-model_path_ = "model714_2.pth"
+model_name = "model714_2"
 
 # --- エージェントの初期化 ---
-agent = DQNAgent(state_dim, action_dim_discrete, buffer_capacity=10000, model_path=model_path_)
+agent = DQNAgent(state_dim, action_dim_discrete, buffer_capacity=10000, model_path=model_name + ".pth")
 
 # --- メインループ ---
 
@@ -101,5 +101,5 @@ plt.xlabel("Episode")
 plt.ylabel("Total Reward")
 plt.title("Episode vs Total Reward")
 plt.grid()
-plt.savefig(model_path_ + "reward_curve.png")
+plt.savefig(model_name + "_reward_curve.png")
 plt.show()
